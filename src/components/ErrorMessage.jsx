@@ -2,20 +2,34 @@ import React, { useContext, useEffect } from 'react';
 import * as S from '../styles.js';
 import { CardDispatchContext } from '../context/CardContext.jsx';
 
-export default function ErrorMessage({ value, children, validate, type }) {
+export default function ErrorMessage({ value, children, validate, type, fieldName }) {
   const dispatch = useContext(CardDispatchContext);
 
   useEffect(() => {
     try {
       validate(value);
+      // dispatch({
+      //   type: type,
+      //   errorMessage: '',
+      // });
       dispatch({
-        type: type,
-        errorMessage: '',
+        type,
+        fieldName,
+        payload: {
+          errorMessage: '',
+        },
       });
     } catch ({ message }) {
+      // dispatch({
+      //   type: type,
+      //   errorMessage: message,
+      // });s
       dispatch({
-        type: type,
-        errorMessage: message,
+        type,
+        fieldName,
+        payload: {
+          errorMessage: message,
+        },
       });
     }
   }, [value]);

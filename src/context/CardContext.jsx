@@ -15,17 +15,31 @@ export const TYPES = {
   SET_LIST_MODAL_FLAG: 'SET_LIST_MODAL_FLAG',
   SET_TIP_MODAL_FLAG: 'SET_TIP_MODAL_FLAG',
   SET_COMPANY_INDEX: 'SET_COMPANY_INDEX',
+  UPDATE_FIELD: 'UPDATE_FIELD',
+  UPDATE_FIELD_ARRAY: 'UPDATE_FIELD_ARRAY',
 };
 
 export const initialState = {
-  cardNumber: ['', '', '', ''],
-  cardNumberErrorMessage: '',
+  cardOwner: {
+    value: '',
+    errorMessage: '',
+  },
+  cardCvc: {
+    value: '',
+    errorMessage: '',
+  },
+  cardNumber: {
+    value: ['', '', '', ''],
+    errorMessage: '',
+  },
+  // cardNumber: ['', '', '', ''],
+  // cardNumberErrorMessage: '',
   cardExpiration: ['', ''],
   cardExpirationErrorMessage: '',
-  cardOwner: '',
-  cardOwnerErrorMessage: '',
-  cardCvc: '',
-  cardCvcErrorMessage: '',
+  // cardOwner: '',
+  // cardOwnerErrorMessage: '',
+  // cardCvc: '',
+  // cardCvcErrorMessage: '',
   cardPassword: ['', ''],
   cardPasswordErrorMessage: '',
   cardCompanyIndex: -1,
@@ -33,11 +47,64 @@ export const initialState = {
   tipModalFlag: false,
 };
 
+// export const initialState = {
+//   cardNumber: {
+//     value: ['', '', '', ''],
+//     errorMessage: '',
+//   },
+//   cardExpiration: {
+//     value: ['', '', '', ''],
+//     errorMessage: '',
+//   },
+//   cardOwner: {
+//     value: '',
+//     errorMessage: '',
+//   },
+//   cardCvc: {
+//     value: '',
+//     errorMessage: '',
+//   },
+//   cardPassword: {
+//     value: ['', ''],
+//     errorMessage: '',
+//   },
+//   cardCompanyIndex: -1,
+//   listModalFlag: false,
+//   tipModalFlag: false,
+// };
+
 export const CardStateContext = createContext();
 export const CardDispatchContext = createContext();
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case TYPES.UPDATE_FIELD: {
+      const { fieldName, payload } = action;
+
+      return {
+        ...state,
+        [fieldName]: {
+          ...state[fieldName],
+          ...payload,
+        },
+      };
+    }
+
+    case TYPES.UPDATE_FIELD_ARRAY: {
+      const cardNumber = [...state.cardNumber.value];
+      const { fieldName, payload } = action;
+      const { value, index } = payload;
+      cardNumber[index] = value;
+
+      return {
+        ...state,
+        [fieldName]: {
+          ...state[fieldName],
+          cardNumber,
+        },
+      };
+    }
+
     case TYPES.SET_NUMBER: {
       const cardNumber = [...state.cardNumber];
       const { value, index } = action;

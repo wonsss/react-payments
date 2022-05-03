@@ -5,19 +5,25 @@ import ErrorMessage from './ErrorMessage';
 import { TYPES, CardStateContext, CardDispatchContext } from '../context/CardContext';
 
 export default function CardOwner({ color }) {
-  const { cardOwner, cardOwnerErrorMessage } = useContext(CardStateContext);
+  const { cardOwner } = useContext(CardStateContext);
   const dispatch = useContext(CardDispatchContext);
 
   const onChangeInput = (e) => {
-    dispatch({ type: TYPES.SET_OWNER, value: e.target.value });
+    dispatch({
+      type: TYPES.UPDATE_FIELD,
+      fieldName: 'cardOwner',
+      payload: {
+        value: e.target.value,
+      },
+    });
   };
 
   return (
     <S.Container>
       <S.TitleWrapper>
         <S.InputTitle marginBottom="0px">카드소유자 이름(선택)</S.InputTitle>
-        <S.NameLength isLengthValidated={cardOwner.length > 30}>
-          <span>{cardOwner.length}</span>/<span>30</span>
+        <S.NameLength isLengthValidated={cardOwner.value.length > 30}>
+          <span>{cardOwner.value.length}/30</span>
         </S.NameLength>
       </S.TitleWrapper>
       <S.InputBox>
@@ -27,17 +33,18 @@ export default function CardOwner({ color }) {
             type="text"
             maxLength="30"
             color={color}
-            value={cardOwner}
+            value={cardOwner.value}
             onChange={onChangeInput}
           />
         </S.InputContainer>
       </S.InputBox>
       <ErrorMessage
-        value={cardOwner}
+        value={cardOwner.value}
         validate={validator.checkCardOwner}
-        type={TYPES.SET_OWNER_ERROR_MESSAGE}
+        type={TYPES.UPDATE_FIELD}
+        fieldName="cardOwner"
       >
-        {cardOwnerErrorMessage}
+        {cardOwner.errorMessage}
       </ErrorMessage>
     </S.Container>
   );

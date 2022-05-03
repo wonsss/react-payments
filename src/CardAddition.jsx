@@ -29,7 +29,7 @@ function CardAddition() {
       validator.checkCardCompany(cardCompanyIndex);
       validator.checkCardNumber(cardNumber);
       validator.checkCardExpiration(cardExpiration);
-      validator.checkCardOwner(cardOwner);
+      validator.checkCardOwner(cardOwner.value);
       validator.checkCardCvc(cardCvc);
       validator.checkCardPassword(cardPassword);
       return true;
@@ -47,7 +47,7 @@ function CardAddition() {
       카드사: CARD_COMPANIES[cardCompanyIndex].NAME,
       카드번호: cardNumber,
       카드만료일: cardExpiration,
-      카드소유자: cardOwner,
+      카드소유자: cardOwner.value,
       보안코드: cardCvc,
       카드비밀번호: cardPassword,
     };
@@ -66,7 +66,7 @@ function CardAddition() {
         cardCompanyIndex={cardCompanyIndex}
         cardNumber={cardNumber}
         cardExpiration={cardExpiration}
-        cardOwner={cardOwner}
+        cardOwner={cardOwner.value}
         cardName={cardName}
         color={cardColor}
         onClick={onClickCard}

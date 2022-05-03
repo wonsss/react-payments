@@ -6,11 +6,17 @@ import { CARD_COMPANIES } from '../constants';
 import { TYPES, CardStateContext, CardDispatchContext } from '../context/CardContext';
 
 export default function CardCvc() {
-  const { cardCvc, cardCvcErrorMessage, cardCompanyIndex } = useContext(CardStateContext);
+  const { cardCvc, cardCompanyIndex } = useContext(CardStateContext);
   const dispatch = useContext(CardDispatchContext);
 
   const onChangeInput = (e) => {
-    dispatch({ type: TYPES.SET_CVC, value: e.target.value });
+    dispatch({
+      type: TYPES.UPDATE_FIELD,
+      fieldName: 'cardCvc',
+      payload: {
+        value: e.target.value,
+      },
+    });
   };
 
   const onClickTip = () => {
@@ -27,7 +33,7 @@ export default function CardCvc() {
           <S.InputBasic
             type="password"
             maxLength="3"
-            value={cardCvc}
+            value={cardCvc.value}
             color={cardColor}
             onChange={onChangeInput}
           />
@@ -35,11 +41,12 @@ export default function CardCvc() {
         <S.TipButton onClick={onClickTip}>?</S.TipButton>
       </S.InputBox>
       <ErrorMessage
-        value={cardCvc}
+        value={cardCvc.value}
         validate={validator.checkCardCvc}
-        type={TYPES.SET_CVC_ERROR_MESSAGE}
+        type={TYPES.UPDATE_FIELD}
+        fieldName={'cardCvc'}
       >
-        {cardCvcErrorMessage}
+        {cardCvc.errorMessage}
       </ErrorMessage>
     </S.Container>
   );
