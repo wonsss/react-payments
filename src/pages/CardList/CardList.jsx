@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TYPES } from 'store/card/types';
-import { CardDispatchContext, CardStateContext } from 'store/card/CardContext';
+import { CardDispatchContext } from 'store/card/CardContext';
 import PageTitle from 'components/PageTitle/PageTitle';
 import AnotherCard from 'components/AnotherCard/AnotherCard';
 import Card from 'components/Card/Card';
@@ -12,9 +12,23 @@ import DraggableCard from 'common/DragDrop/DraggableCard';
 import CardConfirmModal from 'containers/CardConfirmModal/CardConfirmModal';
 import ClickableBox from 'common/ClickableBox/ClickableBox';
 import CardManageModal from 'containers/CardManageModal/CardManageModal';
+import { dbService } from 'firebase/fbase';
 
 export default function CardList({ navigate }) {
-  const { cards } = useContext(CardStateContext);
+  const [fetchedCards, setFetchedCards] = useState([]);
+
+  useEffect(() => {
+    dbService
+      .collection('cardList')
+      .orderBy('cardOrder', 'desc')
+      .onSnapshot((snapshot) => {
+        const cardArray = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+        }));
+        setFetchedCards(cardArray);
+      });
+  }, []);
+
   const dispatch = useContext(CardDispatchContext);
   const [modalCardData, setModalCardData] = useState();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -29,7 +43,7 @@ export default function CardList({ navigate }) {
     navigate('/add-card');
   };
 
-  const onSubmitForm = (cardData) => (event, nickname) => {
+  const onSubmitForm = (cardData) => async (event, nickname) => {
     event.preventDefault();
 
     const id = cardData.id;
@@ -55,10 +69,10 @@ export default function CardList({ navigate }) {
     <Container>
       <PageTitle hasPrevButton={false}>보유 카드</PageTitle>
       <FlexColumnBox>
-        <DroppableArea cards={cards} dispatch={dispatch} type={TYPES.SET_CARD_ORDER}>
+        <DroppableArea cards={fetchedCards} dispatch={dispatch}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {cards.map((cardData, index) => (
+              {fetchedCards.map((cardData, index) => (
                 <DraggableCard key={cardData.id} card={cardData} index={index}>
                   <ClickableBox onClick={() => onClickCard(cardData)}>
                     <Card

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
 import validator from 'lib/validations';
 import { CARD_COMPANIES } from 'lib/constants';
 import Card from 'components/Card/Card';
@@ -18,8 +19,9 @@ import { TYPES } from 'store/card/types';
 import Container from 'common/Container/Container';
 import CardConfirmModal from 'containers/CardConfirmModal/CardConfirmModal';
 import ClickableBox from 'common/ClickableBox/ClickableBox';
+// import { dbService } from 'firebase/fbase';
 
-function AddCard({ navigate }) {
+export default function AddCard({ navigate }) {
   const {
     cardNumber,
     cardExpiration,
@@ -28,7 +30,9 @@ function AddCard({ navigate }) {
     cardPassword,
     cardCompanyIndex,
     cardCompanyErrorMessage,
+    cards,
   } = useContext(CardStateContext);
+  const dispatch = useContext(CardDispatchContext);
 
   const [isListModalOpen, setIsListModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -55,8 +59,6 @@ function AddCard({ navigate }) {
       return false;
     }
   };
-
-  const dispatch = useContext(CardDispatchContext);
 
   const onClickCard = () => {
     setIsListModalOpen(true);
@@ -87,7 +89,9 @@ function AddCard({ navigate }) {
       cardNickname: nickname,
       id: uuidv4(),
     };
-    dispatch({ type: TYPES.ADD_CARD, newCardData });
+    console.log(cards.length);
+    dispatch({ type: TYPES.ADD_CARD, newCardData, dataLength: cards.length });
+    console.log('onSubmitForm');
 
     onCloseModal();
     navigate('/card-list');
@@ -142,5 +146,3 @@ function AddCard({ navigate }) {
     </Container>
   );
 }
-
-export default AddCard;
