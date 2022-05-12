@@ -1,5 +1,14 @@
 import { TYPES } from 'store/card/types';
 
+const initialState = {
+  cardNumber: ['', '', '', ''],
+  cardExpiration: ['', ''],
+  cardOwner: '',
+  cardCvc: '',
+  cardPassword: ['', ''],
+  cardCompanyIndex: -1,
+};
+
 const reducer = (state, action) => {
   switch (action.type) {
     case TYPES.SET_NUMBER: {
@@ -96,12 +105,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         cards: [...state.cards, action.newCardData],
-        cardNumber: ['', '', '', ''],
-        cardExpiration: ['', ''],
-        cardOwner: '',
-        cardCvc: '',
-        cardPassword: ['', ''],
-        cardCompanyIndex: -1,
+        ...initialState,
       };
     }
 
@@ -123,12 +127,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         cards: updatedCards,
-        cardNumber: ['', '', '', ''],
-        cardExpiration: ['', ''],
-        cardOwner: '',
-        cardCvc: '',
-        cardPassword: ['', ''],
-        cardCompanyIndex: -1,
+        ...initialState,
       };
     }
 
