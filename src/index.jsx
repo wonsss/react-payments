@@ -1,12 +1,12 @@
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from 'App';
-import * as S from 'globalStyles/index.js';
+import * as Styled from 'globalStyles/index.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <S.GlobalStyle />
+    <Styled.GlobalStyle />
     <Router>
       <App />
     </Router>

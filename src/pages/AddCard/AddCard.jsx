@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import validator from 'lib/validations';
 import { CARD_COMPANIES } from 'lib/constants';
@@ -19,7 +20,7 @@ import Container from 'common/Container/Container';
 import CardConfirmModal from 'containers/CardConfirmModal/CardConfirmModal';
 import ClickableBox from 'common/ClickableBox/ClickableBox';
 
-function AddCard({ navigate }) {
+function AddCard() {
   const {
     cardNumber,
     cardExpiration,
@@ -30,10 +31,14 @@ function AddCard({ navigate }) {
     cardCompanyErrorMessage,
   } = useContext(CardStateContext);
 
+  const dispatch = useContext(CardDispatchContext);
+
   const [isListModalOpen, setIsListModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isTipModalOpen, setIsTipModalOpen] = useState(false);
   const [cardData, setCardData] = useState();
+
+  const navigate = useNavigate();
 
   const onClickPrev = () => {
     navigate('/card-list');
@@ -55,8 +60,6 @@ function AddCard({ navigate }) {
       return false;
     }
   };
-
-  const dispatch = useContext(CardDispatchContext);
 
   const onClickCard = () => {
     setIsListModalOpen(true);

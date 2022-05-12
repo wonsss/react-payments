@@ -1,4 +1,5 @@
 import CardContext from 'store/card/CardContext';
+import { MemoryRouter } from 'react-router-dom';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -12,6 +13,10 @@ export const parameters = {
 
 export const decorators = [
   (Story) => {
-    return <CardContext>{Story()}</CardContext>;
+    return (
+      <MemoryRouter>
+        <CardContext>{Story()}</CardContext>
+      </MemoryRouter>
+    );
   },
 ];
